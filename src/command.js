@@ -1,5 +1,3 @@
-import {Message} from './message.js'
-
 /**
  * Command object. Can be used in the MinecraftAPIClient to run code 
  * in minecraft education.
@@ -40,5 +38,3 @@ class Command extends Message {
     }
 
 }
-
-export {Command};
