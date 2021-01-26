@@ -45,7 +45,8 @@ And when you want to build the changes into the release
 And when you want to push the release to the repo
 
 4. Increment `package.json` version. 
-4. Run `git commit -m <your message>`
-5. Run `git tag v<version number>`
-6. Run `git push --follow-tags`
-7. Go to https://github.com/nathan-nesbitt/Minecraft_API/releases and and publish the new version.
+5. Add change information to `CHANGELOG.md`
+6. Run `git commit -m <your message>`
+7. Run `git tag v<version number>`
+8. Run `git push --tag`
+9. Go to https://github.com/nathan-nesbitt/Minecraft_API/releases and and publish the new version.
