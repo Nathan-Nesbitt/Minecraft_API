@@ -1,6 +1,6 @@
 {
   "name": "minecraft_api",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Front End API for Communicating with Minecraft API in the Browser.",
   "main": "build.js",
   "scripts": {
