@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
-      - uses: actions/checkout@v2
+      uses: actions/checkout@v2
     - name: Run Build Script
-      - run: |
+      run: |
         npm install
         npm run build
     - name: Upload library to release
