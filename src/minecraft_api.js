@@ -1,7 +1,3 @@
-import {EventHandler} from '../static/event.js';
-import {Command} from '../static/command.js';
-import {Message} from '../static/message.js'
-
 /**
  * This is the basic MinecraftAPIClient class that allows users to
  * write code and communicate with the game.
@@ -132,5 +128,3 @@ class MinecraftAPIClient {
     }
 
 }
-
-export {MinecraftAPIClient};

@@ -41,5 +41,3 @@ class Message {
         return this.function;
     }
 }
-
-export {Message};
