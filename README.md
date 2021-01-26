@@ -48,5 +48,6 @@ And when you want to push the release to the repo
 5. Add change information to `CHANGELOG.md`
 6. Run `git commit -m <your message>`
 7. Run `git tag v<version number>`
-8. Run `git push --tag`
+8. Run `git push --follow-tags`
+8. Run `git push --tag` (Not Sure if Required)
 9. Go to https://github.com/nathan-nesbitt/Minecraft_API/releases and and publish the new version.

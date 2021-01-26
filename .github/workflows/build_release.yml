@@ -2,20 +2,26 @@ name: Build and Release
 
 on:
   push:
+    branches: [ development ]
     tags:
       - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
+  deploy:
     name: Publish Library
     runs-on: ubuntu-latest
-
     steps:
-    - name: Upload binaries to release
+    - name: Checkout Code
+      uses: actions/checkout@v2
+    - name: Run Build Script
+      run: |
+        npm install
+        npm run build
+    - name: Upload library to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: dist/minecraft_api.js
+        file: ${{ github.workspace }}/dist/minecraft_api.js
         asset_name: minecraft_api.js
         tag: ${{ github.ref }}
         overwrite: true
