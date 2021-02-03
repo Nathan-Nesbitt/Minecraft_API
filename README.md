@@ -15,22 +15,101 @@ minecraft education and the browser.
 ### MinecraftClientAPI
 
 This initializes a connection with the game via websockets and provides a set 
-of functions for subscribing messages to be sent to the server.
+of functions for subscribing messages to be sent to the server. We can create
+an instance of the object which contains all of the methods for communication.
 
-#### `open_connection`
-Opens a connection to the game via port `3000`
+```{js}
+var minecraftAPI = new MinecraftAPIClient()
+```
 
-#### `add_message`
-Adds a message, which can either be a `Command` or an `EventHandler` and 
-subscribes it within the game.
+#### `open_backend_connection`
+Opens a connection to the back end server via port `3001`
+
+### `open_game_connection`
+Opens a connection to the minecraft electron application and initializes a 
+callback function that handles the messages back from the server.
+
+```{js}
+minecraftAPI.open_game_connection()
+```
+
+### `start`
+Runs all of the commands and events in the queue. This should be the last thing
+run.
+
+```{js}
+minecraftAPI.start()
+```
+
+#### `add_game_message`
+Adds a message, which can either be a `Command` or an `EventHandler`, to the 
+game queue. This is only sent to the server once the `start` method is called.
+
+```
+var callback_function () {
+    console.log("My Callback Function");
+}
+
+// For an event //
+var event = new EventHandler("BlockBroken", callback_function)
+minecraftAPI.add_game_message(event);
+
+// For a command //
+var command = new Command("Say", ["Hello"], callback_function)
+minecraftAPI.add_game_message(command);
+```
 
 ### `EventHandler`
-Creates a new event, takes an event to handle and a function to call back to.
+Creates a new event, takes an event to handle and a function to call back to 
+whenever the event is triggered.
+
+```
+var callback_function () {
+    console.log("My Callback Function");
+}
+
+var event = new EventHandler("BlockBroken", callback_function)
+```
 
 ### `Command`
 Creates a new command, takes a command to run in game, some arguments for that
 command, and an optional callback function.
 
+```
+var callback_function () {
+    console.log("My Callback Function");
+}
+
+var command = new Command("Say", ["Hello"], callback_function);
+minecraftAPI.add_game_message(command);
+```
+
+## Full Example Script
+
+```
+// Callback function that is triggered on event or when the command response is
+// recieved
+var callback_function = function () {
+    console.log("CALLBACK FUNCTION!")
+}
+
+// New Minecraft Object
+var minecraftAPI = new MinecraftAPIClient()
+
+// Define the new events
+var event = new EventHandler("BlockBroken", foo)
+var command = new Command("Say", ["Hello"], foo)
+
+// Enqueue the events 
+minecraftAPI.add_game_message(event);
+minecraftAPI.add_game_message(command);
+
+// Open a connection with the game
+minecraftAPI.open_game_connection()
+
+// Send all of the messages to the game 
+minecraftAPI.start()
+```
 
 ## Developing
 To develop on this repo simply have to:
