@@ -8,8 +8,8 @@ gulp.task('compile', function() {
         .pipe(sourcemaps.init()) // This means sourcemaps will be generated 
 
       return result
-         .pipe(concat('minecraft_api.js')) // You can use other plugins that also support gulp-sourcemaps
-         .pipe(uglify()) 
-         .pipe(sourcemaps.write()) // Now the sourcemaps are added to the .js file 
+         .pipe(concat('minecraft_api.js')) // Concats the files
+         .pipe(uglify()) // Uglifies the files so they are a fast dump
+         .pipe(sourcemaps.write()) // Adds the sourcemaps to the final output 
          .pipe(gulp.dest('dist'));
 });
