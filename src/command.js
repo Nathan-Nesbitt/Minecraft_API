@@ -2,6 +2,9 @@
  * Command object. Can be used in the MinecraftAPIClient to run code 
  * in minecraft education.
  */
+
+import {Message} from './message.js';
+
 class Command extends Message {
 
     /**
@@ -13,10 +16,11 @@ class Command extends Message {
      * @param {String[]} args - Array of arguments for the command
      * @param {Function} func - Callback function on success (default null)
      */
-    constructor(command, args, func = null) {
-        super(func);
+    constructor(minecraft_api_connection, command, args, func = null) {
+        super(minecraft_api_connection, func, "commandRequest");
         this.command = command;
         this.arguments = args;
+        this.add_game_message()
     }
 
     /**
@@ -37,4 +41,18 @@ class Command extends Message {
         return this.arguments;
     }
 
+    /**
+     * Overrides toString for object, adds in essential fields for 
+     * the object return value.
+     */
+    toString() {
+        // Get parent function
+        var parent = super.toString()
+        // Set essential fields //
+        parent.body.commandLine = this.command + " " + this.arguments.join(" ");
+        return parent;
+    }
+
 }
+
+export {Command};
