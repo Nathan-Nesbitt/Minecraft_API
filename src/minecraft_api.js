@@ -30,7 +30,6 @@ class MinecraftAPIClient {
         this.game_messages = {}
         // This is a shared resource to halt attempts to connect while running a command
         this.version = 1;
-        this.agent_event_response_ID = "00000000-0000-0000-0000-000000000000";
     }
 
     /**
@@ -67,12 +66,6 @@ class MinecraftAPIClient {
      * as the game is just using an ipcRenderer to communicate.
      */
     open_game_connection() {
-        // Adds an event listener to the document 
-        document.addEventListener("game_event", (event) => {
-            const {
-                event_data
-            } = event;
-        })
         if (!window.ipcRenderer)
             return false;
             // If the app responds, we run the response handler function
@@ -103,10 +96,23 @@ class MinecraftAPIClient {
     }
 
     run_callback(id, body) {
+        var callbacks = []
+        // If we are dealing with a command it will have an ID
         if(this.game_messages[id])
-            var callback = this.game_messages[id].get_response_function();
-        if (callback)
-            callback(body);
+            callbacks.push(this.game_messages[id]);
+        // Since the game returns a 0x ID for events you have to search for the event type
+        else {
+            callbacks = [Object.values(this.game_messages).find(message => message.event === body.body.eventName)]
+        }
+        // Only try to run commands if we actually have some commands
+        if (callbacks.length > 0)
+            callbacks.forEach(callback => {
+                // Try to get the response function, and run it
+                callback = callback.get_response_function()
+                if(callback)
+                    callback(body);
+            })
+        // Deletes the callback function if it was a command 
         if (this.game_messages[id] instanceof Command)
             delete this.game_messages[id];
     }
