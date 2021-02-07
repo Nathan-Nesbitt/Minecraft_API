@@ -117,15 +117,16 @@
 
     var command = new Command(minecraft_api, "Say", ["Hello", "Friend"]);
 
-    console.log(minecraft_api.game_messages)
+    var callback_function = function(game_data) {
+        console.log("Callback 1", game_data)
+	}
+	
+	var callback_function_2 = function(game_data) {
+		console.log("Callback 2", game_data)
+	}
 
-    var foo = function(value) {
-        console.log(value)
-    }
-
-    var event = new EventHandler(minecraft_api, "BlockBroken", foo)
-    console.log(EventHandler.prototype)
-    console.log(minecraft_api.game_messages)
+	new EventHandler(minecraft_api, "BlockBroken", callback_function)
+	new EventHandler(minecraft_api, "BlockBroken", callback_function_2)
 
     minecraft_api.start()
 
