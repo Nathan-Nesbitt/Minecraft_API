@@ -48,15 +48,22 @@ class MinecraftAPIClient {
             this.socket = new WebSocket("ws://localhost:5678");
 
             this.socket.onmessage = function (message) {
-                message = JSON.parse(message);
-                parent.postMessage(message)
+                console.log(message)
             }
 
             this.socket.onopen = () => {
                 resolve();
             }
 
-            this.socket.onerror = () => {
+            this.socket.onclose = (code) => {
+                if(!code.wasClean)
+                    console.log("Error Connection with backend closed:", code.code)
+                else
+                    console.log("Backend Connection Closed.")
+            }
+
+            this.socket.onerror = (err) => {
+                console.log(err);
                 reject();
             }
         })
