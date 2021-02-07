@@ -17,6 +17,8 @@ class Command extends Message {
      * @param {Function} func - Callback function on success (default null)
      */
     constructor(minecraft_api_connection, command, args, func = null) {
+        if(!Command.prototype.commands.includes(command))
+            throw new Error("That is not a valid Minecraft Command. These are accepted:\n" + Command.prototype.commands.join("\n"))
         super(minecraft_api_connection, func, "commandRequest");
         this.command = command;
         this.arguments = args;
@@ -54,5 +56,14 @@ class Command extends Message {
     }
 
 }
+
+Command.prototype.commands = [
+    "Move",
+    "Teleport",
+    "Turn",
+    "Say",
+    "Give",
+    "Place"
+]
 
 export {Command};
