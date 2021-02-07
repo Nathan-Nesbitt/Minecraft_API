@@ -102,11 +102,12 @@ class MinecraftAPIClient {
             callbacks.push(this.game_messages[id]);
         // Since the game returns a 0x ID for events you have to search for the event type
         else {
-            callbacks = [Object.values(this.game_messages).find(message => message.event === body.body.eventName)]
+            callbacks = Object.values(this.game_messages).filter(message => message.event === body.body.eventName)
         }
         // Only try to run commands if we actually have some commands
         if (callbacks.length > 0)
             callbacks.forEach(callback => {
+                console.log(callback)
                 // Try to get the response function, and run it
                 callback = callback.get_response_function()
                 if(callback)
