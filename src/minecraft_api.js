@@ -42,8 +42,10 @@ class MinecraftAPIClient {
         if (this.socket)
             this.socket.close();
 
+        this.socket_free = true;
+
         return new Promise((resolve, reject) => {
-            this.socket = new WebSocket("http://localhost:3001");
+            this.socket = new WebSocket("ws://localhost:5678");
 
             this.socket.onmessage = function (message) {
                 message = JSON.parse(message);
@@ -144,6 +146,7 @@ class MinecraftAPIClient {
      * @param {JSON} message 
      */
     send_server_message(message) {
+        console.log(this.socket, message)
         this.socket.send(JSON.stringify(message))
     }
 
