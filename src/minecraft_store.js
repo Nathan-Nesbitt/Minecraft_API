@@ -10,7 +10,7 @@ class DataStore extends BackendMessage {
      * @param {String} file_name - Name of the location where the data should be saved
      */
     constructor(connection, file_name) {
-        super(connection, file_name, "MinecraftStore");
+        super(connection, file_name, "Storage");
     }
 
     /**
