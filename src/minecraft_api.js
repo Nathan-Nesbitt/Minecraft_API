@@ -107,7 +107,6 @@ class MinecraftAPIClient {
         // Only try to run commands if we actually have some commands
         if (callbacks.length > 0)
             callbacks.forEach(callback => {
-                console.log(callback)
                 // Try to get the response function, and run it
                 callback = callback.get_response_function()
                 if(callback)
@@ -166,8 +165,6 @@ class MinecraftAPIClient {
 
         this.open_game_connection()
         
-        console.log(this.game_messages)
-
         for (const [uuid, message] of Object.entries(this.game_messages)) {
             // Sends the message via sockets //
             this.send_message_to_game(message.toString())
