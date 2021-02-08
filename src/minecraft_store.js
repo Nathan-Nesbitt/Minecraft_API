@@ -19,10 +19,21 @@ class DataStore extends BackendMessage {
      * 
      * @param {JSON} data - Message from the game
      */
-    store_value(data) {
+    async store_value(data) {
+        // Sends the data to the backend 
         let message = this.toString()
         message.body.data = data;
         this.send_backend_message(message)
+
+        // Creates a promise for the event data once it is returned 
+        return new Promise(function(resolve, reject) {
+            document.addEventListener(this.uuid, (result) => {
+                if(result.detail.success)
+                    resolve(result.detail.data);
+                else
+                    reject(result.detail.data);
+            })
+        }.bind(this))
     }
 
 }

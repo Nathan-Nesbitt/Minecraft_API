@@ -118,18 +118,31 @@
     new Command(minecraft_api, "Say", ["Hello", "Friend"]);
 
 	var datastore = new DataStore(minecraft_api, "foo.csv")
+	var datastore_2 = new DataStore(minecraft_api, "foo_2.csv")
 	
 
     var callback_function = function(game_data) {
-		datastore.store_value(game_data);
+		console.log("Callback 1", game_data)
+		datastore.store_value(game_data)
+			.then((result) => {
+				console.log("Successful insertion into back end", result)
+			}).catch(err => {
+				console.log("Error submitting data to back end.", err);
+			});
 	}
 	
 	var callback_function_2 = function(game_data) {
 		console.log("Callback 2", game_data)
+		datastore_2.store_value(game_data)
+			.then((result) => {
+				console.log("Successful insertion into back end", result)
+			}).catch(err => {
+				console.log("Error submitting data to back end.", err);
+			});
 	}
 
 	new EventHandler(minecraft_api, "BlockBroken", callback_function)
-	new EventHandler(minecraft_api, "BlockBroken", callback_function_2)
+	new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
 
 	minecraft_api.open_backend_connection();
     minecraft_api.start()

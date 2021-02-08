@@ -24,8 +24,6 @@ import {Command} from './command.js';
 class MinecraftAPIClient {
 
     constructor() {
-        // Messages to be sent to the server 
-        this.server_messages = []
         // The games messages that need to be sent
         this.game_messages = {}
         // This is a shared resource to halt attempts to connect while running a command
@@ -48,7 +46,21 @@ class MinecraftAPIClient {
             this.socket = new WebSocket("ws://localhost:5678");
 
             this.socket.onmessage = function (message) {
-                console.log(message)
+                var backend_message = JSON.parse(message.data)
+                var uuid = backend_message.header.UUID
+                var success = true;
+                // If there was an error, set it as an error
+                if(!backend_message.header.status) 
+                    success = false;
+                
+                // Trigger an event with the ID of the object 
+                var event = new CustomEvent(uuid, {
+                    detail: {
+                        "success": success,
+                        "data": backend_message
+                    }
+                });
+                document.dispatchEvent(event);
             }
 
             this.socket.onopen = () => {
@@ -125,16 +137,7 @@ class MinecraftAPIClient {
         if (this.game_messages[id] instanceof Command)
             delete this.game_messages[id];
     }
-
-    /**
-     * Adds a message to the queue of messages to be sent to the
-     * server.
-     * @param {JSON} message 
-     */
-    add_server_message(message) {
-        this.server_messages.push(message)
-    }
-
+    
     /**
      * Adds a message to the queue of messages to be sent to the
      * game.
@@ -153,8 +156,12 @@ class MinecraftAPIClient {
      * @param {JSON} message 
      */
     send_server_message(message) {
-        console.log(this.socket, message)
-        this.socket.send(JSON.stringify(message))
+        if(this.socket.readyState === WebSocket.OPEN)
+            this.socket.send(JSON.stringify(message))
+        else {
+            setTimeout(200);
+            this.send_server_message(message);
+        }
     }
 
     /**
