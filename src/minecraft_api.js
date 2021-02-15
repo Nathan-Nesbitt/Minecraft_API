@@ -190,3 +190,7 @@ class MinecraftAPIClient {
 }
 
 export {MinecraftAPIClient};
+export {Command} from './command.js';
+export {EventHandler} from './event.js';
+export {MinecraftLearns} from './minecraft_learns.js';
+export {DataStore} from './minecraft_store.js';
