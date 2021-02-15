@@ -105,14 +105,8 @@
 <script src="/src/setup_monaco.js"></script>
 <script src="/src/setup_buttons.js"></script>
 <script type="module">
-    import {MinecraftAPIClient} from '/src/minecraft_api.js';
     
-    import {EventHandler} from '/src/event.js';
-    import {Command} from '/src/command.js';
-
-    import {MinecraftLearns} from '/src/minecraft_learns.js'
-    import {DataStore} from '/src/minecraft_store.js';
-
+    import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
     var minecraft_api = new MinecraftAPIClient();
 
     new Command(minecraft_api, "Say", ["Hello", "Friend"]);

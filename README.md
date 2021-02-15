@@ -3,10 +3,12 @@ Front End API for Communicating with Minecraft API in the Browser
 
 ## How to use?
 You can simply include the distribution file `minecraft_api.js` inside of
-you project
+you project. 
 
 ```{html}
-<script src="minecraft_api.js"></script>
+<script>
+    import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+</script>
 ```
 
 This file contains a set of objects that allow for communication between 
