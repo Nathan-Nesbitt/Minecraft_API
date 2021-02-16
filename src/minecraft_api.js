@@ -144,7 +144,10 @@ class MinecraftAPIClient {
      * @param {Message} message 
      */
     add_game_message(message) {
+        // Appends the command to the queue //
         this.game_messages[message.uuid] = message;
+        // Tries to run the command //
+        this.send_message_to_game(this.game_messages[message.uuid].toString())
     }
 
     /**
