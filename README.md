@@ -1,9 +1,9 @@
 # Minecraft_API
-Front End API for Communicating with Minecraft API in the Browser
+Front End API for Communicating with Minecraft API in the Browser.
 
 ## How to use?
 You can simply include the distribution file `minecraft_api.js` inside of
-you project
+your project. 
 
 ```html
 <script>
@@ -12,12 +12,15 @@ you project
 ```
 
 This file contains a set of objects that allow for communication between 
-minecraft education and the browser. 
+minecraft education and the browser. You do not have to include all of them,
+but if you are not sure what you are doing that is the easiest way to ensure
+that the code is working.
 
 ### MinecraftClientAPI
 
 This initializes a connection with the game via websockets and provides a set 
-of functions for subscribing messages to be sent to the server.
+of functions for subscribing messages to be sent to the server. We can create
+an instance of the object which contains all of the methods for communication.
 
 ```js
 var minecraftAPI = new MinecraftAPIClient()
@@ -117,6 +120,7 @@ library. It provides the functionality to fully train and use the predictions
 from models using game data produced using the DataStore library.
 
 We can create a connection with the back-end library by running the following:
+
 
 ```js
 var minecraft_learns = new MinecraftLearns(minecraft_api, "<file_location>.csv", "<model_type>", "<response_variable>");
@@ -225,20 +229,30 @@ minecraft_learns.process_data() // Clean the data //
     )
 ```
 
-## Developing
-To develop on this repo simply have to:
+## Development
+If you want to add to this, there is a basic python FLASK server that has been
+included to provide simple testing of functionality. It has a webpage inside of
+it called example.html which is served up from `localhost:3000`. 
 
-1. Clone the repo
-2. Run `npm install`
+If you want to see how it is communicating in the game, you can open up the
+integrated terminal in the browser within the game by  
 
-And when you want to build the changes into the release
+1. Pressing `c` in game
+2. Clicking on `localhost:3000`
+3. Right click anywhere inside of the webpage that pops up, other than the editor.
+4. Click `inspect element` and click `Network` and check the `Disable Cache` box
+5. Go to `Console` and it will show output from the game. To refresh the page 
+    run `location.reload()`
 
-3. Run `npm run build`
+To add new libraries to the game you simply need to:
 
-And when you want to push the release to the repo
+1. Add a new JS file in `/src` called `your_library.js` that extends the 
+    `backend_message.js` class.
+2. Override the `toString()` so that you can use it to send a message to the 
+    game. The parent `BackendMessage` has the core functionality for each 
+    message but you can add additional headers and body data required for your 
+    library. (See `minecraft_learns.js` for an example of how to do this)
+3. Export `your_library.js` main class in the `minecraft_learns.js` file. 
 
-4. Increment `package.json` version. 
-4. Run `git commit -m <your message>`
-5. Run `git tag v<version number>`
-6. Run `git push --follow-tags`
-7. Go to https://github.com/nathan-nesbitt/Minecraft_API/releases and and publish the new version.
+You can then send messages to the back end by simply calling 
+`this.send_backend_message(message)` in your class. 
