@@ -5,15 +5,10 @@ Front End API for Communicating with Minecraft API in the Browser
 You can simply include the distribution file `minecraft_api.js` inside of
 you project
 
-<<<<<<< Updated upstream
-```{html}
-<script src="minecraft_api.js"></script>
-=======
 ```html
 <script>
     import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
 </script>
->>>>>>> Stashed changes
 ```
 
 This file contains a set of objects that allow for communication between 
@@ -24,17 +19,6 @@ minecraft education and the browser.
 This initializes a connection with the game via websockets and provides a set 
 of functions for subscribing messages to be sent to the server.
 
-<<<<<<< Updated upstream
-#### `open_connection`
-Opens a connection to the game via port `3000`
-
-#### `add_message`
-Adds a message, which can either be a `Command` or an `EventHandler` and 
-subscribes it within the game.
-
-### `EventHandler`
-Creates a new event, takes an event to handle and a function to call back to.
-=======
 ```js
 var minecraftAPI = new MinecraftAPIClient()
 ```
@@ -86,14 +70,11 @@ var callback_function () {
 
 new EventHandler(minecraftAPI, "BlockBroken", callback_function)
 ```
->>>>>>> Stashed changes
 
 ### `Command`
 Creates a new command, takes a command to run in game, some arguments for that
 command, and an optional callback function.
 
-<<<<<<< Updated upstream
-=======
 ```js
 var minecraftAPI = new MinecraftAPIClient()
 
@@ -243,7 +224,6 @@ minecraft_learns.process_data() // Clean the data //
         new EventHandler(minecraft_api, "PlayerTravelled", callback_function)
     )
 ```
->>>>>>> Stashed changes
 
 ## Developing
 To develop on this repo simply have to:
