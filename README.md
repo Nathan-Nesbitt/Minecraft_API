@@ -227,3 +227,31 @@ minecraft_learns.process_data() // Clean the data //
         new EventHandler(minecraft_api, "PlayerTravelled", callback_function)
     )
 ```
+
+## Development
+If you want to add to this, there is a basic python FLASK server that has been
+included to provide simple testing of functionality. It has a webpage inside of
+it called example.html which is served up from `localhost:3000`. 
+
+If you want to see how it is communicating in the game, you can open up the
+integrated terminal in the browser within the game by  
+
+1. Pressing `c` in game
+2. Clicking on `localhost:3000`
+3. Right click anywhere inside of the webpage that pops up, other than the editor.
+4. Click `inspect element` and click `Network` and check the `Disable Cache` box
+5. Go to `Console` and it will show output from the game. To refresh the page 
+    run `location.reload()`
+
+To add new libraries to the game you simply need to:
+
+1. Add a new JS file in `/src` called `your_library.js` that extends the 
+    `backend_message.js` class.
+2. Override the `toString()` so that you can use it to send a message to the 
+    game. The parent `BackendMessage` has the core functionality for each 
+    message but you can add additional headers and body data required for your 
+    library. (See `minecraft_learns.js` for an example of how to do this)
+3. Export `your_library.js` main class in the `minecraft_learns.js` file. 
+
+You can then send messages to the back end by simply calling 
+`this.send_backend_message(message)` in your class. 
