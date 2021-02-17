@@ -23,14 +23,14 @@ of functions for subscribing messages to be sent to the server.
 var minecraftAPI = new MinecraftAPIClient()
 ```
 
-#### `open_backend_connection()`
+#### open_backend_connection
 Opens a connection to the back end server via port `5678`
 
 ```js
 minecraftAPI.open_backend_connection()
 ```
 
-### `start`
+### start
 Runs all of the commands and events in the queue initializing a connection with
 the game. This should be the last thing run.
 
@@ -38,7 +38,7 @@ the game. This should be the last thing run.
 minecraftAPI.start()
 ```
 
-#### `add_game_message`
+#### add_game_message
 Adds a message, which can either be a `Command` or an `EventHandler`, to the 
 game queue. This is only sent to the server once the `start` method is called.
 
@@ -57,7 +57,7 @@ new Command(minecraftAPI, "Say", ["Hello"], callback_function)
 
 ```
 
-### `EventHandler`
+### EventHandler
 Creates a new event, takes an event to handle and a function to call back to 
 whenever the event is triggered.
 
@@ -71,7 +71,7 @@ var callback_function () {
 new EventHandler(minecraftAPI, "BlockBroken", callback_function)
 ```
 
-### `Command`
+### Command
 Creates a new command, takes a command to run in game, some arguments for that
 command, and an optional callback function.
 
