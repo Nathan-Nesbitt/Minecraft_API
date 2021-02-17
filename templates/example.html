@@ -106,7 +106,7 @@
 <script src="/src/setup_buttons.js"></script>
 <script type="module">
     
-    import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+    import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from '/src/minecraft_api.js';
     var minecraft_api = new MinecraftAPIClient();
 
     new Command(minecraft_api, "Say", ["Hello", "Friend"]);
@@ -154,6 +154,10 @@
 			}			
 		)
 	}
+	
+	// Open backend and game connection //
+	minecraft_api.open_backend_connection();
+    minecraft_api.start()
 
 	// Function that cleans the data, then trains it on the previously defined params //
 	minecraft_learns.process_data()
@@ -162,10 +166,6 @@
 			// Then we create an event handler for the game event //
 			new EventHandler(minecraft_api, "PlayerTravelled", callback_function)
 		)
-	
-	// Open backend and game connection //
-	minecraft_api.open_backend_connection();
-    minecraft_api.start()
 
 </script>
 </html>
