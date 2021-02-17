@@ -5,7 +5,7 @@ Front End API for Communicating with Minecraft API in the Browser.
 You can simply include the distribution file `minecraft_api.js` inside of
 your project. 
 
-```{html}
+```html
 <script>
     import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
 </script>
@@ -22,14 +22,14 @@ This initializes a connection with the game via websockets and provides a set
 of functions for subscribing messages to be sent to the server. We can create
 an instance of the object which contains all of the methods for communication.
 
-```{js}
+```js
 var minecraftAPI = new MinecraftAPIClient()
 ```
 
 #### `open_backend_connection()`
 Opens a connection to the back end server via port `5678`
 
-```
+```js
 minecraftAPI.open_backend_connection()
 ```
 
@@ -37,7 +37,7 @@ minecraftAPI.open_backend_connection()
 Runs all of the commands and events in the queue initializing a connection with
 the game. This should be the last thing run.
 
-```{js}
+```js
 minecraftAPI.start()
 ```
 
@@ -45,7 +45,7 @@ minecraftAPI.start()
 Adds a message, which can either be a `Command` or an `EventHandler`, to the 
 game queue. This is only sent to the server once the `start` method is called.
 
-```
+```js
 var minecraftAPI = new MinecraftAPIClient()
 
 var callback_function () {
@@ -64,7 +64,7 @@ new Command(minecraftAPI, "Say", ["Hello"], callback_function)
 Creates a new event, takes an event to handle and a function to call back to 
 whenever the event is triggered.
 
-```
+```js
 var minecraftAPI = new MinecraftAPIClient()
 
 var callback_function () {
@@ -78,7 +78,7 @@ new EventHandler(minecraftAPI, "BlockBroken", callback_function)
 Creates a new command, takes a command to run in game, some arguments for that
 command, and an optional callback function.
 
-```
+```js
 var minecraftAPI = new MinecraftAPIClient()
 
 var callback_function () {
@@ -92,7 +92,7 @@ new Command(minecraftAPI, "Say", ["Hello"], callback_function);
 Creates an object that can be used to send data to the back end. It takes in
 a minecraft_api object and a filename where the data should be saved.
 
-```{js}
+```js
 var datastore = new DataStore(minecraft_api, "filename.csv");
 ```
 
@@ -102,7 +102,7 @@ It takes in 1 argument which is the data that will be written to the file,
 and is written to be asynchronous using promises so you can use the `then()`
 and `catch()` syntax. 
 
-```{js} 
+```js
 datastore.store_value(game_data)
     .then((result) => {
         // If the insertion is successful //
@@ -121,7 +121,8 @@ from models using game data produced using the DataStore library.
 
 We can create a connection with the back-end library by running the following:
 
-```
+
+```js
 var minecraft_learns = new MinecraftLearns(minecraft_api, "<file_location>.csv", "<model_type>", "<response_variable>");
 ```
 
@@ -134,7 +135,7 @@ This step processes the data file that was originally specified. This is
 asynchronous so you can use the `then()` javascript syntax to ensure that the
 data is processed before going onto the next step.
 
-```
+```js
 minecraft_learns.process_data()
 ```
 
@@ -142,7 +143,7 @@ minecraft_learns.process_data()
 This step trains the model using the data. Again this is async so you can use 
 the `then()` syntax to control the process flow to wait for the backend response.
 
-```
+```js
 minecraft_learns.train()
 ```
 
@@ -151,7 +152,7 @@ This takes in data from the game, and makes predictions using the model on the
 previously defined `response_variable`. This is async, so you can wait for the
 messages from the game by using `then()`.
 
-```
+```js
 minecraft_learns.predict(data).then(
     prediction => {
         // ... your code to control the game here // 
@@ -161,7 +162,7 @@ minecraft_learns.predict(data).then(
 
 ## Full Example Script
 
-```{js}
+```js
 // Importing the libraries //
 
 import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
