@@ -115,6 +115,50 @@ datastore.store_value(game_data)
 
 ### MinecraftLearns
 
+This is a class that handles the messages to the broker for the MinecraftLearns
+library. It provides the functionality to fully train and use the predictions
+from models using game data produced using the DataStore library.
+
+We can create a connection with the back-end library by running the following:
+
+```
+var minecraft_learns = new MinecraftLearns(minecraft_api, "<file_location>.csv", "<model_type>", "<response_variable>");
+```
+
+This allows it to grab the previously loaded data file, then stores the type of
+model you are going to use, along with the parameter it is predicting on.
+
+#### process_data
+
+This step processes the data file that was originally specified. This is 
+asynchronous so you can use the `then()` javascript syntax to ensure that the
+data is processed before going onto the next step.
+
+```
+minecraft_learns.process_data()
+```
+
+#### train
+This step trains the model using the data. Again this is async so you can use 
+the `then()` syntax to control the process flow to wait for the backend response.
+
+```
+minecraft_learns.train()
+```
+
+#### predict
+This takes in data from the game, and makes predictions using the model on the
+previously defined `response_variable`. This is async, so you can wait for the
+messages from the game by using `then()`.
+
+```
+minecraft_learns.predict(data).then(
+    prediction => {
+        // ... your code to control the game here // 
+    }
+)
+```
+
 ## Full Example Script
 
 ```{js}
@@ -156,8 +200,30 @@ var callback_function_2 = function(game_data) {
 new EventHandler(minecraft_api, "BlockBroken", callback_function)
 new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
 
+// Load in minecraft model using foo.csv created before, predicting based on "Block" type using Linear Regression //
+var minecraft_learns = new MinecraftLearns(minecraft_api, "foo.csv", "linear_regression", "Block");
+
+// Create a callback function that makes a prediction based on the game data //
+var callback_function_3 = function(data) {
+    minecraft_learns.predict(data) // Make a prediction based on the game data //
+    .then(
+        // Then use the response to move in that direction //
+        result => {
+            new Command(minecraft_api, "say", ["to mine this resource go", result]);
+        }			
+    )
+}
+	
 // Opens a connection to the back end //
 minecraft_api.open_backend_connection();
 // Opens the connection to the game //
 minecraft_api.start()
+
+// Function that cleans the data, then trains it on the previously defined params //
+
+minecraft_learns.process_data() // Clean the data //
+    .then(minecraft_learns.train()) // Train the model using the data //
+    .then(
+        new EventHandler(minecraft_api, "PlayerTravelled", callback_function)
+    )
 ```

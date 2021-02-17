@@ -88,6 +88,7 @@ class MinecraftLearns extends BackendMessage {
         // Creates a promise for the event data once it is returned 
         return new Promise(function(resolve, reject) {
             document.addEventListener(this.uuid, (result) => {
+                console.log(this.uuid, func, result)
                 if(result.detail.success)
                     resolve(result.detail.data);
                 else
@@ -97,7 +98,7 @@ class MinecraftLearns extends BackendMessage {
     }
 }
 
-MinecraftLearns.prototype.response_variables [
+MinecraftLearns.prototype.response_variables = [
     "eventName",
     "triggerTime",
     "Count",
@@ -137,7 +138,7 @@ MinecraftLearns.prototype.response_variables [
     "PlacementMethod"
 ]
 
-MinecraftLearns.prototype.models [
+MinecraftLearns.prototype.models = [
     "decision_tree",
     "kmeans",
     "knn",
