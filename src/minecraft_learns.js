@@ -145,7 +145,8 @@ MinecraftLearns.prototype.models = [
     "lda",
     "linear_regression",
     "random_forest_classification",
-    "random_forest_regression"
+    "random_forest_regression",
+    "PLS"
 ]
 
 
