@@ -48,6 +48,7 @@ class MinecraftAPIClient {
             this.socket.onmessage = function (message) {
                 var backend_message = JSON.parse(message.data)
                 var uuid = backend_message.header.UUID
+                console.log(uuid)
                 var success = true;
                 // If there was an error, set it as an error
                 if(!backend_message.header.status) 
@@ -144,7 +145,10 @@ class MinecraftAPIClient {
      * @param {Message} message 
      */
     add_game_message(message) {
+        // Appends the command to the queue //
         this.game_messages[message.uuid] = message;
+        // Tries to run the command //
+        this.send_message_to_game(this.game_messages[message.uuid].toString())
     }
 
     /**
@@ -156,11 +160,14 @@ class MinecraftAPIClient {
      * @param {JSON} message 
      */
     send_server_message(message) {
+        // Tries to send the message if the readystate is open //
         if(this.socket.readyState === WebSocket.OPEN)
             this.socket.send(JSON.stringify(message))
-        else {
-            setTimeout(200);
-            this.send_server_message(message);
+        // If this code runs too fast, you need to handle it beating the connection //
+        else if (this.socket.readyState === WebSocket.CONNECTING) {
+            this.socket.addEventListener("open", () => {
+                this.send_server_message(message)
+            })
         }
     }
 
