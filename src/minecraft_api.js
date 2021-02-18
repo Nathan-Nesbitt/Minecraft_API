@@ -28,6 +28,10 @@ class MinecraftAPIClient {
         this.game_messages = {}
         // This is a shared resource to halt attempts to connect while running a command
         this.version = 1;
+        // Create connection to game when you create the object //
+        this.open_game_connection()
+        // Opens a back end connection immediately //
+        this.open_backend_connection();
     }
 
     /**
@@ -48,7 +52,6 @@ class MinecraftAPIClient {
             this.socket.onmessage = function (message) {
                 var backend_message = JSON.parse(message.data)
                 var uuid = backend_message.header.UUID
-                console.log(uuid)
                 var success = true;
                 // If there was an error, set it as an error
                 if(!backend_message.header.status) 
@@ -90,7 +93,7 @@ class MinecraftAPIClient {
     open_game_connection() {
         if (!window.ipcRenderer)
             return false;
-            // If the app responds, we run the response handler function
+        // If the app responds, we run the response handler function
         window.ipcRenderer.on("responseFromApp", (err, str) => {
             this.game_response(err, str);
         });
@@ -179,20 +182,6 @@ class MinecraftAPIClient {
      */
     send_message_to_game(message) {
         window.ipcRenderer.sendToHost('sendToApp', message);
-    }
-
-    /**
-     * Starts the connection with the webserver, then sends the commands
-     * to the server based on the code written.
-     */
-    start() {
-
-        this.open_game_connection()
-        
-        for (const [uuid, message] of Object.entries(this.game_messages)) {
-            // Sends the message via sockets //
-            this.send_message_to_game(message.toString())
-        }
     }
 }
 
