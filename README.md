@@ -26,39 +26,10 @@ an instance of the object which contains all of the methods for communication.
 var minecraftAPI = new MinecraftAPIClient()
 ```
 
-#### open_backend_connection
-Opens a connection to the back end server via port `5678`
+This creates both a connection with the game, and a connection on the backend
+with a WS server listening on port 5678.
 
-```js
-minecraftAPI.open_backend_connection()
-```
-
-### start
-Runs all of the commands and events in the queue initializing a connection with
-the game. This should be the last thing run.
-
-```js
-minecraftAPI.start()
-```
-
-#### add_game_message
-Adds a message, which can either be a `Command` or an `EventHandler`, to the 
-game queue. This is only sent to the server once the `start` method is called.
-
-```js
-var minecraftAPI = new MinecraftAPIClient()
-
-var callback_function () {
-    console.log("My Callback Function");
-}
-
-// For an event //
-new EventHandler(minecraftAPI, "BlockBroken", callback_function)
-
-// For a command //
-new Command(minecraftAPI, "Say", ["Hello"], callback_function)
-
-```
+This must be run first.
 
 ### EventHandler
 Creates a new event, takes an event to handle and a function to call back to 
@@ -210,15 +181,10 @@ var callback_function_3 = function(data) {
     .then(
         // Then use the response to move in that direction //
         result => {
-            new Command(minecraft_api, "say", ["to mine this resource go", result]);
+            new Command(minecraft_api, "say", ["to mine this resource go to", result]);
         }			
     )
 }
-	
-// Opens a connection to the back end //
-minecraft_api.open_backend_connection();
-// Opens the connection to the game //
-minecraft_api.start()
 
 // Function that cleans the data, then trains it on the previously defined params //
 
