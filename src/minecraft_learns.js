@@ -6,25 +6,41 @@ class MinecraftLearns extends BackendMessage {
      * @param {MinecraftAPIClient} connection - Minecraft API Connection
      * @param {String} file_name - Location of the file where the data exists
      * @param {String} model_type - Name of the model that you will train
-     * @param {String} response_variable - Variable that is being predicted
+     * @param {Array<String>} response_variables - Variable that is being predicted
+     * @param {Array<String>} drop_cols - Columns to be removed from the prediction
      */
-    constructor(connection, file_name, model_type, response_variable) {
+    constructor(connection, file_name, model_type, response_variables, drop_cols=null) {
         // Checks if the user provided a proper model //
         if(!MinecraftLearns.prototype.models.includes(model_type))
-        throw new Error(
-            "That is not a valid model type. These are currently accepted:\n" 
-            + MinecraftLearns.prototype.models.join("\n")
-        )
-
-        // Checks to see if the user provided a proper response variable //
-        if(!MinecraftLearns.prototype.response_variables.includes(response_variable))
             throw new Error(
-                "That is not a valid response variable. These are accepted:\n" 
-                + MinecraftLearns.prototype.response_variables.join("\n")
+                "That is not a valid model type. These are currently accepted:\n" 
+                + MinecraftLearns.prototype.models.join("\n")
             )
+
+        
+        // Checks to see if the user provided a proper response variable //
+        response_variables.forEach(response_variable => {
+            if(!MinecraftLearns.prototype.valid_response_variables.includes(response_variable))
+                throw new Error(
+                    response_variable + " is not a valid response variable. These are accepted:\n" 
+                    + MinecraftLearns.prototype.response_variables.join("\n")
+                )
+        });
+
+        // Checks to see if the user provided a column that exists //
+        if(drop_cols)
+            drop_cols.forEach(variable => {
+                if(!MinecraftLearns.prototype.valid_response_variables.includes(variable))
+                    throw new Error(
+                        response_variable + " is not a valid column to drop. These are accepted:\n" 
+                        + MinecraftLearns.prototype.response_variables.join("\n")
+                    )
+            });
+
         super(connection, file_name, "MinecraftLearns");
         this.model_type = model_type;
-        this.response_variable = response_variable;
+        this.response_variables = response_variables;
+        this.drop_cols = drop_cols;
     }
 
     /**
@@ -79,7 +95,8 @@ class MinecraftLearns extends BackendMessage {
 
         // Sets the header info for the message //
         message.header.model_type = this.model_type;
-        message.header.response_variable = this.response_variable;
+        message.header.response_variables = this.response_variables;
+        message.header.drop_cols = this.drop_cols;
         message.header.function = func;
         
         // Send the message to the backend //
@@ -98,7 +115,7 @@ class MinecraftLearns extends BackendMessage {
     }
 }
 
-MinecraftLearns.prototype.response_variables = [
+MinecraftLearns.prototype.valid_response_variables = [
     "eventName",
     "triggerTime",
     "Count",

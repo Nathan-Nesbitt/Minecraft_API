@@ -122,11 +122,12 @@ from models using game data produced using the DataStore library.
 We can create a connection with the back-end library by running the following:
 
 ```
-var minecraft_learns = new MinecraftLearns(minecraft_api, "<file_location>.csv", "<model_type>", "<response_variable>");
+var minecraft_learns = new MinecraftLearns(minecraft_api, "<file_location>.csv", "<model_type>", ["<response_variable>"], ["<columns_to_remove>"]);
 ```
 
 This allows it to grab the previously loaded data file, then stores the type of
-model you are going to use, along with the parameter it is predicting on.
+model you are going to use, along with the parameter it is predicting on, and the
+columns to ignore when making the prediction.
 
 #### process_data
 
@@ -201,7 +202,7 @@ new EventHandler(minecraft_api, "BlockBroken", callback_function)
 new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
 
 // Load in minecraft model using foo.csv created before, predicting based on "Block" type using Linear Regression //
-var minecraft_learns = new MinecraftLearns(minecraft_api, "foo.csv", "linear_regression", "Block");
+var minecraft_learns = new MinecraftLearns(minecraft_api, "foo.csv", "linear_regression", ["Block"]);
 
 // Create a callback function that makes a prediction based on the game data //
 var callback_function_3 = function(data) {
