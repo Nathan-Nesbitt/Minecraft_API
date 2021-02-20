@@ -94,7 +94,14 @@ We can create a connection with the back-end library by running the following:
 
 
 ```js
-var minecraft_learns = new MinecraftLearns(minecraft_api, "<file_location>.csv", "<model_type>", ["<response_variable>"], ["<columns_to_remove>"]);
+var args = {
+    connection: minecraft_api, 
+    file_name: "", 
+    model_type: "", 
+    response_variables: [], 
+    params: {}
+}
+var minecraft_learns = new MinecraftLearns(args);
 ```
 
 This allows it to grab the previously loaded data file, then stores the type of
@@ -173,8 +180,17 @@ var callback_function_2 = function(game_data) {
 new EventHandler(minecraft_api, "BlockBroken", callback_function)
 new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
 
-// Load in minecraft model using foo.csv created before, predicting based on "Block" type using Linear Regression //
-var minecraft_learns = new MinecraftLearns(minecraft_api, "foo.csv", "linear_regression", ["Block"]);
+// Load in minecraft model using foo.csv created before //
+	var args = {
+		connection: minecraft_api, 
+		file_name: "foo.csv", 
+		model_type: "linear_regression", 
+		response_variables: ["Block"], 
+		params: {
+			"pca": false
+		}
+	}
+var minecraft_learns = new MinecraftLearns(args);
 
 // Create a callback function that makes a prediction based on the game data //
 var callback_function_3 = function(data) {
