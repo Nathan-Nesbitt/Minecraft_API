@@ -105,8 +105,8 @@ class MinecraftLearns extends BackendMessage {
      * @returns {Promise}
      */
 
-    async predict(data) {
-        return this.send_data("predict", data)
+    async predict(data, value) {
+        return this.send_data("predict", data, value)
     }
 
     /**
@@ -118,12 +118,16 @@ class MinecraftLearns extends BackendMessage {
      * 
      * @returns {Promise}
      */
-    send_data(func, data=null) {
+    send_data(func, data=null, value=null) {
         let message = this.toString()
         
         // Fill the data //
         if(data)
             message.body.data = data;
+
+        // Value is just what we are trying to predict if the model needs it //
+        if(value)
+            message.body.value = value;
 
         // Sets the header info for the message //
         message.header.model_type = this.model_type;
@@ -196,7 +200,8 @@ MinecraftLearns.prototype.valid_response_variables = [
 ]
 
 MinecraftLearns.prototype.models = [
-    "decision_tree",
+    "decision_tree_regression",
+    "decision_tree_classification",
     "kmeans",
     "knn",
     "lda",
