@@ -1,3 +1,8 @@
+/**
+ * Written By Nathan Nesbitt
+ * 
+ */
+
 import {BackendMessage} from './backend_message.js';
 
 class MinecraftLearns extends BackendMessage {
