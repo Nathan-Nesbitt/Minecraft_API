@@ -1,4 +1,8 @@
 /**
+ * Written by Nathan Nesbitt, Copyright 2020.
+ */
+
+/**
  * Parent class for both EventHandler and Command, which defines
  * the callback function and additional functionalities. This would normally 
  * be a generic, but as Generics are not available in JavaScript this is defined 
