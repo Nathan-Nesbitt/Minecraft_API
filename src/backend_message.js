@@ -1,3 +1,8 @@
+/**
+ * Written by Nathan Nesbitt, Copyright 2020.
+ */
+
+
 class BackendMessage {
     constructor(minecraft_api_connection, file_name, target_process) {
         this.file_name = file_name;

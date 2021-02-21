@@ -1,3 +1,6 @@
+/**
+ * Written by Nathan Nesbitt, Copyright 2020.
+ */
 import {BackendMessage} from './backend_message.js';
 
 class DataStore extends BackendMessage {
