@@ -142,7 +142,16 @@
 	/* Minecraft Learns Example */
 
 	// Load in minecraft model using foo.csv created before //
-	var minecraft_learns = new MinecraftLearns(minecraft_api, "foo.csv", "linear_regression", ["Block"]);
+	var args = {
+		connection: minecraft_api, 
+		file_name: "foo.csv", 
+		model_type: "linear_regression", 
+		response_variables: ["Block"], 
+		params: {
+			"pca": false
+		}
+	}
+	var minecraft_learns = new MinecraftLearns(args);
 
 	// Create a callback function that makes a prediction based on the game data //
 	var callback_function_3 = function(data) {

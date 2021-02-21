@@ -3,51 +3,83 @@ import {BackendMessage} from './backend_message.js';
 class MinecraftLearns extends BackendMessage {
     /**
      * 
-     * @param {MinecraftAPIClient} connection - Minecraft API Connection
-     * @param {String} file_name - Location of the file where the data exists
-     * @param {String} model_type - Name of the model that you will train
-     * @param {Array<String>} response_variables - Variable that is being predicted
-     * @param {Array<String>} drop_cols - Columns to be removed from the prediction
+     * Creates a model on the back end that can be trained and used to make
+     * predictions. 
+     * @param {object} args - Object full of parameters
+     * @param {MinecraftAPIClient} args.connection - Minecraft API Connection
+     * @param {String} args.file_name - Location of the file where the data exists
+     * @param {String} args.model_type - Name of the model that you will train
+     * @param {Array<String>} args.response_variables - Variable that is being predicted
+     * @param {Array<String>} args.features - (Optional) Columns to be used for the prediction
+     * @param {Array<String>} args.features_drop - (Optional) Opposite of features, list of features to not be used
+     * @param {JSON} args.params - (Optional) Other parameters to be passed to the back end
      */
-    constructor(connection, file_name, model_type, response_variables, drop_cols=null) {
+    constructor(args) {
+        
         // Checks if the user provided a proper model //
-        if(!MinecraftLearns.prototype.models.includes(model_type))
+        if(!MinecraftLearns.prototype.models.includes(args.model_type))
             throw new Error(
-                "That is not a valid model type. These are currently accepted:\n" 
+                args.model_type + " is not a valid model type. These are currently accepted:\n" 
                 + MinecraftLearns.prototype.models.join("\n")
             )
 
         
         // Checks to see if the user provided a proper response variable //
-        response_variables.forEach(response_variable => {
+        args.response_variables.forEach(response_variable => {
             if(!MinecraftLearns.prototype.valid_response_variables.includes(response_variable))
                 throw new Error(
                     response_variable + " is not a valid response variable. These are accepted:\n" 
-                    + MinecraftLearns.prototype.response_variables.join("\n")
+                    + MinecraftLearns.prototype.valid_response_variables.join("\n")
                 )
         });
 
         // Checks to see if the user provided a column that exists //
-        if(drop_cols)
-            drop_cols.forEach(variable => {
+        if(args.features)
+            args.features.forEach(variable => {
                 if(!MinecraftLearns.prototype.valid_response_variables.includes(variable))
                     throw new Error(
-                        response_variable + " is not a valid column to drop. These are accepted:\n" 
-                        + MinecraftLearns.prototype.response_variables.join("\n")
+                        variable + " is not a valid column to drop. These are accepted:\n" 
+                        + MinecraftLearns.prototype.valid_response_variables.join("\n")
                     )
             });
 
-        super(connection, file_name, "MinecraftLearns");
-        this.model_type = model_type;
-        this.response_variables = response_variables;
-        this.drop_cols = drop_cols;
+        // Checks to see if the user provided a column that exists //
+        if(args.features_drop)
+            args.features_drop.forEach(variable => {
+                if(!MinecraftLearns.prototype.valid_response_variables.includes(variable))
+                    throw new Error(
+                        variable + " is not a valid column to drop. These are accepted:\n" 
+                        + MinecraftLearns.prototype.valid_response_variables.join("\n")
+                    )
+            });
+        
+        // Checks to see if the list of params are valid //
+        if(args.params) {            
+            for (const [name, value] of Object.entries(args.params)) {
+                if(!MinecraftLearns.prototype.params.includes(name))
+                    throw new Error(
+                        variable + " is not a valid parameter to pass to the back end. These are accepted:\n" 
+                        + MinecraftLearns.prototype.params.join("\n")
+                    )
+            }
+        }
+                
+        // Initialize the default back end structure //
+        super(args.connection, args.file_name, "MinecraftLearns");
+
+        // Initialize all of the object values //
+        this.model_type = args.model_type;
+        this.response_variables = args.response_variables;
+        this.features = args.features;
+        this.features_drop = args.features_drop;
+        this.params = args.params;
     }
 
     /**
      * Sends command to process data on the back end. Uses the data that was
      * provided on initialization of the object.
      * 
-     * @returns {Promise}
+     * @returns {Promise} - Message Promise
      */
     async process_data() {
         this.send_data("process")
@@ -96,9 +128,17 @@ class MinecraftLearns extends BackendMessage {
         // Sets the header info for the message //
         message.header.model_type = this.model_type;
         message.header.response_variables = this.response_variables;
-        message.header.drop_cols = this.drop_cols;
         message.header.function = func;
+        message.header.params = this.params;
+
+        // Include features or drop features based on input from user //
+        if(this.features)
+            message.header.features = this.features
+        else if(this.features_drop)
+            message.header.features_drop = this.features_drop
         
+
+        console.log(message)
         // Send the message to the backend //
         this.send_backend_message(message)
         
@@ -164,6 +204,13 @@ MinecraftLearns.prototype.models = [
     "random_forest_classification",
     "random_forest_regression",
     "PLS"
+]
+
+MinecraftLearns.prototype.params = [
+    "one_hot_encode",
+    "pca",
+    "k",
+    "interactions"
 ]
 
 
