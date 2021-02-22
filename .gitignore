@@ -1,3 +1,24 @@
+# vscode
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+# Local Files for other IDE's
+.project
+
+# TEST DATA DIRECTORY
+data/
+
+# MAC Storage Files
+*.DS_Store
+.AppleDouble
+.LSOverride
+
 # Logs
 logs
 *.log
