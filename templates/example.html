@@ -5,105 +5,16 @@
 	<meta charset="UTF-8" />
 	<meta http-equiv="Content-Security-Policy" />
 	<title>Minecraft AI - Event Collection</title>
-
-	<link rel="stylesheet" href="src/general_styling.css">
 </head>
-
 <body>
-	<div id="overlay">
-		<h1>Help</h1>
-		<div>
-			<p>
-				Connect to Minecraft Education via "c localhost:3000". Be sure to disable
-				secure connection in the settings.
-			</p>
-			<p>
-				Type anything in the text editor. If you are stuck on what events or commands
-				to add, use the buttons to the side.
-			</p>
-			<p>
-				Click anywhere to return to the application.
-			</p>
-		</div>
-	</div>
-	<main class="wide">
-		<div id="code-buttons" class="edit-button general">
-			<h1>Add Code via Button</h1>
-			<div id="command-addition" class="button-group">
-				<p>
-					<label for="commads">Add a Command</label>
-					<select name="commands" id="command">
-						<option value="Move">Move</option>
-						<option value="Teleport">Teleport</option>
-						<option value="Turn">Turn</option>
-						<option value="Say">Say</option>
-						<option value="Give">Give</option>
-						<option value="Place">Place</option>
-					</select>
-
-					<label for="command-arguement">Arguement</label>
-					<input name="command-arguement" id="command-arguement" type="text"></input>
-				</p>
-				<button id="add-command" class="button">Add Command</button>
-			</div>
-			<div id="event-addition" class="button-group">
-				<p>
-					<label for="events">Add an Event</label>
-					<select name="events" id="event-name">
-						<option value="BlockBroken">Block Broken</option>
-						<option value="BlockPlaced">Block Placed</option>
-						<option value="CameraUsed">Camera Used</option>
-						<option value="EndOfDay">End of Day</option>
-						<option value="EntitySpawned">Entity Spawn</option>
-						<option value="ItemAcquired">Item Acquired</option>
-						<option value="ItemCrafted">Item Crafted</option>
-						<option value="ItemDropped">Item Dropped</option>
-						<option value="ItemEquipped">Item Equipped</option>
-						<option value="ItemInteracted">Item Interacted</option>
-						<option value="ItemNamed">Item Named</option>
-						<option value="ItemSmelted">Item Smelted</option>
-						<option value="ItemUsed">Item Used</option>
-						<option value="MobKilled">Mob Killed</option>
-						<option value="MobSpawned">Mob Spawned</option>
-						<option value="PlayerBounced">Player Bounced</option>
-						<option value="PlayerDied">Player Died</option>
-						<option value="PlayerMessage">Player Message</option>
-						<option value="PlayerTeleported">Player Teleported</option>
-						<option value="PlayerTravelled">Player Travelled</option>
-					</select>
-					<label for="event-arguement">Function Name</label>
-					<input name="event-arguement" id="event-arguement" type="text"></input>
-				</p>
-				<button id="add-event" class="button">Add Event</button>
-			</div>
-		</div>
-		<div class="edit-text general">
-			<div id="editor">
-				<h1>Code Creator</h1>
-				<div id="container" class="code"></div>
-				<div class="button-container">
-					<button id="run" class="button">RUN</button>
-					<button id="help" class="button">HELP</button>
-				</div>
-				<!-- <button id="save">save</button> -->
-			</div>
-		</div>
-	</main>
-	<div class="wide general">
-		<div id="output-div">
-			<h1>Output</h1>
-			<div id="console" class="code">
-				<p id="output"></p>
-				<br>
-			</div>
-		</div>
-	</div>
-
+	<p>To test this, right click in the page and select</p>
+	<ol>
+		<li>Inspect Element</li>
+		<li>Network > Check the <b>Disable Cache</b> checkbox</li>
+		<li>Console</li>
+		<li>Type in "location.reload()" to reload the page on changes</li>
+	</ol>
 </body>
-
-<script src="https://unpkg.com/monaco-editor@latest/min/vs/loader.js"></script>
-<script src="/src/setup_monaco.js"></script>
-<script src="/src/setup_buttons.js"></script>
 <script type="module">
     
     import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from '/src/minecraft_api.js';
@@ -111,55 +22,27 @@
 
     new Command(minecraft_api, "Say", ["Hello", "Friend"]);
 
-	var datastore = new DataStore(minecraft_api, "foo.csv")
-	var datastore_2 = new DataStore(minecraft_api, "foo_2.csv")
-	
-
-    var callback_function = function(game_data) {
-		console.log("Callback 1", game_data)
-		datastore.store_value(game_data)
-			.then((result) => {
-				console.log("Successful insertion into back end", result)
-			}).catch(err => {
-				console.log("Error submitting data to back end.", err);
-			});
-	}
-	
-	var callback_function_2 = function(game_data) {
-		console.log("Callback 2", game_data)
-		datastore_2.store_value(game_data)
-			.then((result) => {
-				console.log("Successful insertion into back end", result)
-			}).catch(err => {
-				console.log("Error submitting data to back end.", err);
-			});
-	}
-
-	new EventHandler(minecraft_api, "BlockBroken", callback_function)
-	new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
-
 
 	/* Minecraft Learns Example */
 
-	// Load in minecraft model using foo.csv created before //
+	// Load in minecraft model using block_broken.csv created before //
 	var args = {
 		connection: minecraft_api, 
-		file_name: "foo.csv", 
-		model_type: "linear_regression", 
-		response_variables: ["Block"], 
-		params: {
-			"pca": false
-		}
+		file_name: "block_broken.csv", 
+		model_type: "decision_tree_regression", 
+		response_variables: ["FeetPosY", "Biome"],
+		features: ["Block"]
 	}
 	var minecraft_learns = new MinecraftLearns(args);
 
 	// Create a callback function that makes a prediction based on the game data //
 	var callback_function_3 = function(data) {
-		minecraft_learns.predict(data)
+		minecraft_learns.predict(data, ["diamond_ore"])
 		.then(
 			// Then use the response to move in that direction //
 			result => {
-				new Command(minecraft_api, "say", ["to mine this resource go", result]);
+				console.log("DATA FROM GAME", result.body.prediction)
+				new Command(minecraft_api, "Say", ["to mine this resource go", result.body.prediction]);
 			}			
 		)
 	}
@@ -169,7 +52,7 @@
 		.then(minecraft_learns.train())
 		.then(
 			// Then we create an event handler for the game event //
-			new EventHandler(minecraft_api, "PlayerTravelled", callback_function)
+			new EventHandler(minecraft_api, "PlayerTravelled", callback_function_3)
 		)
 
 </script>

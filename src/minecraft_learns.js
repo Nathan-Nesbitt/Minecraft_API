@@ -115,6 +115,40 @@ class MinecraftLearns extends BackendMessage {
     }
 
     /**
+     * Method that allows the user to create a plot of the data.
+     * 
+     * @param {string} name 
+     * 
+     * @returns {Promise}
+     */
+    async plot(name=null) {
+        return this.send_data("plot", name)
+    }
+
+
+    /**
+     * Method that saves the model to a file on the disk.
+     * 
+     * @param {string} name 
+     * 
+     * @returns {Promise}
+     */
+    async save(name=null) {
+        return this.send.send_data("save", name)
+    }
+
+    /**
+     * Method that loads a model from the disk.
+     * 
+     * @param {string} name
+     * 
+     * @returns {Promise}
+     */
+    async load(name) {
+        return this.send.send_data("load", name)
+    }
+
+    /**
      * Takes in data from the game, packages it inside a proper container
      * for the back end and sends it.
      * 
