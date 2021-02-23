@@ -181,14 +181,12 @@ class MinecraftLearns extends BackendMessage {
             message.header.features_drop = this.features_drop
         
 
-        console.log(message)
         // Send the message to the backend //
         this.send_backend_message(message)
         
         // Creates a promise for the event data once it is returned 
         return new Promise(function(resolve, reject) {
             document.addEventListener(this.uuid, (result) => {
-                console.log(this.uuid, func, result)
                 if(result.detail.success)
                     resolve(result.detail.data);
                 else
