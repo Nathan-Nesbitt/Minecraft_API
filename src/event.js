@@ -19,7 +19,7 @@ class EventHandler extends Message {
     constructor(minecraft_api, event, func = null) {
 
         if(!EventHandler.prototype.events.includes(event))
-            throw new Error("That is not a valid Minecraft Event. These are accepted:\n" + EventHandler.prototype.events.join("\n"))
+            throw new Error(event + " is not a valid Minecraft Event. These are accepted:\n" + EventHandler.prototype.events.join("\n"))
         super(minecraft_api, func, "subscribe")
         this.event = event;
         this.add_game_message()
