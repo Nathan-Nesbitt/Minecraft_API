@@ -1,11 +1,13 @@
 /**
- * Event Handler object. Can be used in the MinecraftAPIClient to create a hook
- * for events in minecraft education.
+ * Written by Nathan Nesbitt, Copyright 2020.
  */
 
 import {Message} from './message.js';
 
-
+/**
+ * Event Handler object. Can be used in the MinecraftAPIClient to create a hook
+ * for events in minecraft education.
+ */
 class EventHandler extends Message {
 
     /**
