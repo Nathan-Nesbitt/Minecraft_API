@@ -44,8 +44,6 @@ class MinecraftAPIClient {
         if (this.socket)
             this.socket.close();
 
-        this.socket_free = true;
-
         return new Promise((resolve, reject) => {
             this.socket = new WebSocket("ws://localhost:5678");
 
@@ -64,6 +62,7 @@ class MinecraftAPIClient {
                         "data": backend_message
                     }
                 });
+                // Trigger an event for that ID //
                 document.dispatchEvent(event);
             }
 
@@ -73,13 +72,13 @@ class MinecraftAPIClient {
 
             this.socket.onclose = (code) => {
                 if(!code.wasClean)
-                    console.log("Error Connection with backend closed:", code.code)
+                    console.log("Error! Connection with backend closed:", code.code)
                 else
                     console.log("Backend Connection Closed.")
             }
 
             this.socket.onerror = (err) => {
-                console.log(err);
+                console.log("Error from the back end connection:", err);
                 reject();
             }
         })
