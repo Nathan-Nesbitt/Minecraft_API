@@ -1,5 +1,15 @@
 # Minecraft_API
-Front End API for Communicating with Minecraft API in the Browser.
+JavaScript API for proxying communications between Minecraft Education Edition 
+and External Applications. 
+
+If you would like to get data from within Minecraft Education edition or if you 
+would like to send commands to the game, you can develop your application on top
+of this API.
+
+## How does it work?
+When you inject this script into the integrated Minecraft Education coding 
+interface it creates a connection to the electron instance in the game, and 
+opens a connection to any application listening on `ws://localhost:5678`.
 
 ## How to use?
 You can simply include the distribution file `minecraft_api.js` inside of
@@ -139,6 +149,36 @@ minecraft_learns.predict(data).then(
 )
 ```
 
+#### plot
+The plot method allows you to create a custom plot of the in game data,
+which is saved to the disk for visualization.
+
+It takes an optional filename parameter, if not specified it sets it to
+a UUID.
+
+```js
+minecraft_learns.plot("filename")
+```
+
+#### save
+Save allows you to save your model to the disk so it can be shared with
+other people or if you want to reload it at a later time. 
+
+It takes an optional filename parameter, and 
+
+```js
+minecraft_learns.save("filename")
+```
+
+#### load
+Load allows you to load a previously trained model into the game.
+The model must have been created using the `save` functionality in
+minecraft_learns.
+
+```js
+minecraft_learns.load("filename")
+```
+
 ## Full Example Script
 
 ```js
@@ -179,37 +219,38 @@ var callback_function_2 = function(game_data) {
 // Creates two new event handlers for blocks being broken and placed //
 new EventHandler(minecraft_api, "BlockBroken", callback_function)
 new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
-
-// Load in minecraft model using foo.csv created before //
-	var args = {
-		connection: minecraft_api, 
-		file_name: "foo.csv", 
-		model_type: "linear_regression", 
-		response_variables: ["Block"], 
-		params: {
-			"pca": false
-		}
-	}
+// Load in minecraft model using block_broken.csv created before //
+var args = {
+    connection: minecraft_api, 
+    file_name: "block_broken.csv", 
+    model_type: "decision_tree_regression", 
+    response_variables: ["FeetPosY", "Biome"],
+    features: ["Block"]
+}
 var minecraft_learns = new MinecraftLearns(args);
 
 // Create a callback function that makes a prediction based on the game data //
 var callback_function_3 = function(data) {
-    minecraft_learns.predict(data) // Make a prediction based on the game data //
+    minecraft_learns.predict(data, ["diamond_ore"])
     .then(
-        // Then use the response to move in that direction //
         result => {
-            new Command(minecraft_api, "say", ["to mine this resource go to", result]);
+            // Then use the response to tell the user where to do in the game //
+            new Command(minecraft_api, "Say", ["to mine this resource go", result.body.prediction]);
         }			
     )
 }
 
 // Function that cleans the data, then trains it on the previously defined params //
+minecraft_learns.process_data()
+    .then(minecraft_learns.train())
+    .then({
+        // Saves the model so you can use it later //
+        minecraft_learns.save();
+        
+        // Then we create an event handler for the game event //
+        new EventHandler(minecraft_api, "PlayerTravelled", callback_function_3)
+    })
 
-minecraft_learns.process_data() // Clean the data //
-    .then(minecraft_learns.train()) // Train the model using the data //
-    .then(
-        new EventHandler(minecraft_api, "PlayerTravelled", callback_function)
-    )
 ```
 
 ## Development
