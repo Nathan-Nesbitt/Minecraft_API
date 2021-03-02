@@ -91,7 +91,7 @@ class MinecraftAPIClient {
      */
     open_game_connection() {
         if (!window.ipcRenderer)
-            return false;
+            throw new Error("Minecraft_API must be run inside the game, not in a browser.");
         // If the app responds, we run the response handler function
         window.ipcRenderer.on("responseFromApp", (err, str) => {
             this.game_response(err, str);
@@ -180,6 +180,8 @@ class MinecraftAPIClient {
      * @param {JSON} message 
      */
     send_message_to_game(message) {
+        if (!window.ipcRenderer)
+            throw new Error("Minecraft_API must be run inside the game, not in a browser.");
         window.ipcRenderer.sendToHost('sendToApp', message);
     }
 }
