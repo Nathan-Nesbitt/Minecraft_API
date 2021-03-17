@@ -2,7 +2,7 @@
  * Written by Nathan Nesbitt, Copyright 2020.
  */
 
-import {Message} from './message.js';
+import Message from './message.js';
 
 /**
  * Event Handler object. Can be used in the MinecraftAPIClient to create a hook
@@ -69,4 +69,4 @@ EventHandler.prototype.events = [
     "PlayerTravelled",
 ]
 
-export {EventHandler};
+export default EventHandler;

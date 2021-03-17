@@ -5,7 +5,7 @@
  * for easier user implementation. 
  */
 
-import {EventHandler} from './event.js';
+import EventHandler from './event.js';
 
 class BlockBrokenEvent extends EventHandler {
     constructor(minecraft_api_connection,  func) {
