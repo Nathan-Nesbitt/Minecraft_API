@@ -3,7 +3,7 @@
  */
 import {BackendMessage} from './backend_message.js';
 
-class DataStore extends BackendMessage {
+export default class DataStore extends BackendMessage {
 
     /**
      * Creates a DataStore object that can be used to store information

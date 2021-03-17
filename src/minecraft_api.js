@@ -18,10 +18,43 @@
  */
 
 import {EventHandler} from './event.js';
-import {Command} from './command.js';
+import {MinecraftLearns} from './minecraft_learns.js';
+import {DataStore} from './minecraft_store.js';
+
+import {
+    BlockBrokenEvent,
+    BlockPlacedEvent,
+    CameraUsedEvent,
+    EndOfDayEvent,
+    EntitySpawnedEvent,
+    ItemAcquiredEvent,
+    ItemCraftedEvent,
+    ItemDroppedEvent,
+    ItemEquippedEvent,
+    ItemInteractedEvent,
+    ItemNamedEvent,
+    ItemSmeltedEvent,
+    ItemUsedEvent,
+    MobKilledEvent,
+    MobSpawnedEvent,
+    PlayerBouncedEvent,
+    PlayerDiedEvent,
+    PlayerMessageEvent,
+    PlayerTeleportedEvent,
+    PlayerTravelledEvent
+} from './events.js';
+
+import {
+    Move,
+    Teleport,
+    Turn,
+    Say,
+    Give,
+    Place
+} from './commands.js';
 
 
-class MinecraftAPIClient {
+export default class MinecraftAPIClient {
 
     constructor() {
         // The games messages that need to be sent
@@ -32,6 +65,8 @@ class MinecraftAPIClient {
         this.open_game_connection()
         // Opens a back end connection immediately //
         this.open_backend_connection();
+        // Keep message objects to avoid garbage collection //
+        this.message_objects = [];
     }
 
     /**
@@ -184,8 +219,157 @@ class MinecraftAPIClient {
     }
 }
 
-export {MinecraftAPIClient};
-export {Command} from './command.js';
-export {EventHandler} from './event.js';
-export {MinecraftLearns} from './minecraft_learns.js';
-export {DataStore} from './minecraft_store.js';
+import {Command} from './command.js';
+
+/**
+ * 
+ * This adds the "objects" to the main Minecraft_API so they can be called like
+ * methods off of the main instance.
+ */
+
+MinecraftAPIClient.prototype.EventHandler = function(event_name, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new EventHandler(this, event_name, callback_function))
+}
+
+MinecraftAPIClient.Command = function(command_name, command_args, callback_function=null) {
+    // This triggers a new object //
+    this.message_objects.push(new Command(this, command_name, command_args, callback_function))
+}
+
+/**
+ * 
+ * This first section is the Commands
+ */
+ MinecraftAPIClient.prototype.Move = function(command_args, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new Move(this, command_args, callback_function))
+}
+
+MinecraftAPIClient.prototype.Teleport = function(command_args, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new Teleport(this, command_args, callback_function))
+}
+
+MinecraftAPIClient.prototype.Turn = function(command_args, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new Turn(this, command_args, callback_function))
+}
+
+MinecraftAPIClient.prototype.Say = function(command_args, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new Say(this, command_args, callback_function))
+}
+
+MinecraftAPIClient.prototype.Give = function(command_args, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new Give(this, command_args, callback_function))
+}
+
+MinecraftAPIClient.prototype.Place = function(command_args, callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new Place(this, command_args, callback_function))
+}
+
+/**
+ * These are the events that can be handled
+ */
+ MinecraftAPIClient.prototype.BlockBrokenEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new BlockBrokenEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.BlockPlacedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new BlockPlacedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.CameraUsedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new CameraUsedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.EndOfDayEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new EndOfDayEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.EntitySpawnedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new EntitySpawnedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemAcquiredEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemAcquiredEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemCraftedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemCraftedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemDroppedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemDroppedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemEquippedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemEquippedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemInteractedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemInteractedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemNamedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemNamedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemSmeltedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemSmeltedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.ItemUsedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new ItemUsedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.MobKilledEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new MobKilledEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.MobSpawnedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new MobSpawnedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.PlayerBouncedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new PlayerBouncedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.PlayerDiedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new PlayerDiedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.PlayerMessageEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new PlayerMessageEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.PlayerTeleportedEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new PlayerTeleportedEvent(this, callback_function))
+}
+
+MinecraftAPIClient.prototype.PlayerTravelledEvent = function(callback_function) {
+    // This triggers a new object //
+    this.message_objects.push(new PlayerTravelledEvent(this, callback_function))
+}
