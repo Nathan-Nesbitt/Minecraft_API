@@ -3,7 +3,7 @@
  */
 
 
-import {Message} from './message.js';
+import Message from './message.js';
 
 
 /**
@@ -71,4 +71,4 @@ Command.prototype.commands = [
     "Place"
 ]
 
-export {Command};
+export default Command;

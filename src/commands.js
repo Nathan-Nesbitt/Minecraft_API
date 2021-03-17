@@ -5,7 +5,7 @@
  * for easier user implementation. 
  */
 
-import {Command} from './command.js';
+import Command from './command.js';
 
 class Move extends Command {
     constructor(minecraft_api_connection, args, func = null) {
