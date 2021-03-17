@@ -17,14 +17,16 @@ your project.
 
 ```html
 <script>
-    import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+    import MinecraftAPIClient from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+
+    import MinecraftLearns from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_learns.js';
+
+    import DataStore from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_store.js';
 </script>
 ```
 
-This file contains a set of objects that allow for communication between 
-minecraft education and the browser. You do not have to include all of them,
-but if you are not sure what you are doing that is the easiest way to ensure
-that the code is working.
+If you only want to communicate with the game, and you are writing your own library
+you do not need the `MinecraftLearns` or `DataStore` imports. 
 
 ### MinecraftClientAPI
 
@@ -52,8 +54,36 @@ var callback_function () {
     console.log("My Callback Function");
 }
 
-new EventHandler(minecraftAPI, "BlockBroken", callback_function)
+minecraftAPI.EventHandler("BlockBroken", callback_function)
 ```
+
+As event handler is more complicated than necessary, there are a set of default
+objects associated with the minecraftClientAPI that makes it easier to handle
+events. The following are the options:
+
+- BlockBrokenEvent
+- BlockPlacedEvent
+- CameraUsedEvent
+- EndOfDayEvent
+- EntitySpawnedEvent
+- ItemAcquiredEvent
+- ItemCraftedEvent
+- ItemDroppedEvent
+- ItemEquippedEvent
+- ItemInteractedEvent
+- ItemNamedEvent
+- ItemSmeltedEvent
+- ItemUsedEvent
+- MobKilledEvent
+- MobSpawnedEvent
+- PlayerBouncedEvent
+- PlayerDiedEvent
+- PlayerMessageEvent
+- PlayerTeleportedEvent
+- PlayerTravelledEvent
+
+They all take one parameter `callback_function` which is just what will be run
+once the event happens.
 
 ### Command
 Creates a new command, takes a command to run in game, some arguments for that
@@ -66,8 +96,21 @@ var callback_function () {
     console.log("My Callback Function");
 }
 
-new Command(minecraftAPI, "Say", ["Hello"], callback_function);
+minecraftAPI.Command("Say", ["Hello"], callback_function);
 ```
+
+Same as the EventHandler class, there are some basic commands that are handled
+so you do not have to remember the syntax:
+
+- Move
+- Teleport
+- Turn
+- Say
+- Give
+- Place
+
+Each of these takes a list of arguments, at the moment you must look up those
+arguments. They can be passed in using an array `[arg_1, arg_2, ...]`.
 
 ### DataStore
 Creates an object that can be used to send data to the back end. It takes in
@@ -184,13 +227,17 @@ minecraft_learns.load("filename")
 ```js
 // Importing the libraries //
 
-import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+import MinecraftAPIClient from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+
+import MinecraftLearns from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_learns.js';
+
+import DataStore from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_store.js';
 
 // Create a minecraftAPI connection
 var minecraft_api = new MinecraftAPIClient();
 
-// Create a new command to the game
-new Command(minecraft_api, "Say", ["Hello", "Friend"]);
+// Create a new command to the game saying hello
+minecraft_api.Say(["Hello", "Friend"]);
 
 // Creates 2 separate datastore connections for saving backend data //
 var datastore = new DataStore(minecraft_api, "foo.csv")
@@ -199,26 +246,27 @@ var datastore_2 = new DataStore(minecraft_api, "foo_2.csv")
 // Callback function that handles game data and saves it to the first file //
 var callback_function = function(game_data) {
     datastore.store_value(game_data)
-        .then((result) => {
-            console.log("Successful insertion into back end", result)
-        }).catch(err => {
-            console.log("Error submitting data to back end.", err);
-        });
+    .then((result) => {
+        console.log("Successful insertion into back end", result)
+    }).catch(err => {
+        console.log("Error submitting data to back end.", err);
+    });
 }
 
 // Callback function that handles game data and saves it to the second file //
 var callback_function_2 = function(game_data) {
     datastore_2.store_value(game_data)
-        .then((result) => {
-            console.log("Successful insertion into back end", result)
-        }).catch(err => {
-            console.log("Error submitting data to back end.", err);
-        });
+    .then((result) => {
+        console.log("Successful insertion into back end", result)
+    }).catch(err => {
+        console.log("Error submitting data to back end.", err);
+    });
 }
 
 // Creates two new event handlers for blocks being broken and placed //
-new EventHandler(minecraft_api, "BlockBroken", callback_function)
-new EventHandler(minecraft_api, "BlockPlaced", callback_function_2)
+minecraft_api.BlockBrokenEvent(callback_function)
+minecraft_api.BlockPlacedEvent(callback_function_2)
+
 // Load in minecraft model using block_broken.csv created before //
 var args = {
     connection: minecraft_api, 
@@ -227,6 +275,8 @@ var args = {
     response_variables: ["FeetPosY", "Biome"],
     features: ["Block"]
 }
+
+// Create a model //
 var minecraft_learns = new MinecraftLearns(args);
 
 // Create a callback function that makes a prediction based on the game data //
@@ -235,7 +285,7 @@ var callback_function_3 = function(data) {
     .then(
         result => {
             // Then use the response to tell the user where to do in the game //
-            new Command(minecraft_api, "Say", ["to mine this resource go", result.body.prediction]);
+            minecraft_api.Say(["to mine this resource go", result.body.prediction]);
         }			
     )
 }
@@ -243,12 +293,12 @@ var callback_function_3 = function(data) {
 // Function that cleans the data, then trains it on the previously defined params //
 minecraft_learns.process_data()
     .then(minecraft_learns.train())
-    .then({
+    .then(() => {
         // Saves the model so you can use it later //
         minecraft_learns.save();
         
         // Then we create an event handler for the game event //
-        new EventHandler(minecraft_api, "PlayerTravelled", callback_function_3)
+        minecraft_api.PlayerTravelledEvent(callback_function_3)
     })
 
 ```
