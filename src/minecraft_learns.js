@@ -254,3 +254,5 @@ MinecraftLearns.prototype.params = [
     "k",
     "interactions"
 ]
+
+export default MinecraftLearns;
