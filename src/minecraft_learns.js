@@ -5,7 +5,7 @@
 
 import {BackendMessage} from './backend_message.js';
 
-class MinecraftLearns extends BackendMessage {
+export default class MinecraftLearns extends BackendMessage {
     /**
      * 
      * Creates a model on the back end that can be trained and used to make
@@ -254,6 +254,3 @@ MinecraftLearns.prototype.params = [
     "k",
     "interactions"
 ]
-
-
-export {MinecraftLearns};
