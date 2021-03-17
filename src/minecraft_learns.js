@@ -255,5 +255,4 @@ MinecraftLearns.prototype.params = [
     "interactions"
 ]
 
-
-export {MinecraftLearns};
+export default MinecraftLearns;
