@@ -231,7 +231,7 @@ MinecraftAPIClient.prototype.EventHandler = function(event_name, callback_functi
     this.message_objects.push(new EventHandler(this, event_name, callback_function))
 }
 
-MinecraftAPIClient.Command = function(command_name, command_args, callback_function=null) {
+MinecraftAPIClient.prototype.Command = function(command_name, command_args, callback_function=null) {
     // This triggers a new object //
     this.message_objects.push(new Command(this, command_name, command_args, callback_function))
 }
