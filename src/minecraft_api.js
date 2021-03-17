@@ -17,8 +17,8 @@
  *  
  */
 
-import {Command} from './command.js';
-import {EventHandler} from './event.js';
+import Command from './command.js';
+import EventHandler from './event.js';
 import MinecraftLearns from './minecraft_learns.js';
 import DataStore from './minecraft_store.js';
 
