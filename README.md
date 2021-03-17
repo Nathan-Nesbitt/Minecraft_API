@@ -18,10 +18,15 @@ your project.
 ```html
 <script>
     import MinecraftAPIClient from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
+
+    import MinecraftLearns from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_learns.js';
+
+    import DataStore from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_store.js';
 </script>
 ```
 
-If you 
+If you only want to communicate with the game, and you are writing your own library
+you do not need the `MinecraftLearns` or `DataStore` imports. 
 
 ### MinecraftClientAPI
 
@@ -222,7 +227,7 @@ minecraft_learns.load("filename")
 ```js
 // Importing the libraries //
 
-import MinecraftAPIClient from '/src/minecraft_api.js';
+import MinecraftAPIClient from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
 
 import MinecraftLearns from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_learns.js';
 
