@@ -41,4 +41,4 @@ export default class DataStore extends BackendMessage {
 
 }
 
-export {DataStore};
+export default DataStore;
