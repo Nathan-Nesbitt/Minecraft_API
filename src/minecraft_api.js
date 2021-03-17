@@ -17,9 +17,10 @@
  *  
  */
 
+import {Command} from './command.js';
 import {EventHandler} from './event.js';
-import {MinecraftLearns} from './minecraft_learns.js';
-import {DataStore} from './minecraft_store.js';
+import MinecraftLearns from './minecraft_learns.js';
+import DataStore from './minecraft_store.js';
 
 import {
     BlockBrokenEvent,
@@ -218,8 +219,6 @@ export default class MinecraftAPIClient {
         window.ipcRenderer.sendToHost('sendToApp', message);
     }
 }
-
-import {Command} from './command.js';
 
 /**
  * 
