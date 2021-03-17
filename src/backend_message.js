@@ -46,4 +46,4 @@ class BackendMessage {
     }
 }
 
-export {BackendMessage};
+export default BackendMessage;
