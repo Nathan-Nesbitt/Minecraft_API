@@ -17,10 +17,11 @@
 </body>
 <script type="module">
     
-    import {EventHandler, Command, MinecraftLearns, DataStore, MinecraftAPIClient} from '/src/minecraft_api.js';
-    var minecraft_api = new MinecraftAPIClient();
+    import MinecraftAPIClient from '/src/minecraft_api.js';
+    
+	var minecraft_api = new MinecraftAPIClient();
 
-    new Command(minecraft_api, "Say", ["Hello", "Friend"]);
+    minecraft_api.Say(["Hello", "Friend"]);
 
 
 	/* Minecraft Learns Example */
@@ -41,19 +42,15 @@
 		.then(
 			// Then use the response to move in that direction //
 			result => {
-				console.log("DATA FROM GAME", result.body.prediction)
-				new Command(minecraft_api, "Say", ["to mine this resource go", result.body.prediction]);
+				minecraft_api.Say(["to mine this resource go", result.body.prediction]);
 			}			
 		)
 	}
 
 	// Function that cleans the data, then trains it on the previously defined params //
 	minecraft_learns.process_data()
-		.then(minecraft_learns.train())
-		.then(
-			// Then we create an event handler for the game event //
-			new EventHandler(minecraft_api, "PlayerTravelled", callback_function_3)
-		)
+	.then(minecraft_learns.train())
+	.then(minecraft_api.PlayerTravelledEvent(callback_function_3))
 
 </script>
 </html>
