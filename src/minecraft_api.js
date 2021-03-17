@@ -57,7 +57,12 @@ import {
 
 export default class MinecraftAPIClient {
 
-    constructor() {
+    /**
+     * Creates the connection to the front and back end.
+     * 
+     * @param {number} port 
+     */
+    constructor(port = 5678) {
         // The games messages that need to be sent
         this.game_messages = {}
         // This is a shared resource to halt attempts to connect while running a command
@@ -68,6 +73,7 @@ export default class MinecraftAPIClient {
         this.open_backend_connection();
         // Keep message objects to avoid garbage collection //
         this.message_objects = [];
+        this.port;
     }
 
     /**
@@ -81,7 +87,7 @@ export default class MinecraftAPIClient {
             this.socket.close();
 
         return new Promise((resolve, reject) => {
-            this.socket = new WebSocket("ws://localhost:5678");
+            this.socket = new WebSocket("ws://localhost:" + this.port);
 
             this.socket.onmessage = function (message) {
                 var backend_message = JSON.parse(message.data)
