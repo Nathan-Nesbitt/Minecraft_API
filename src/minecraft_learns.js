@@ -3,7 +3,7 @@
  * 
  */
 
-import {BackendMessage} from './backend_message.js';
+import BackendMessage from './backend_message.js';
 
 class MinecraftLearns extends BackendMessage {
     /**
