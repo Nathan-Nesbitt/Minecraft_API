@@ -120,7 +120,10 @@ export default class MinecraftAPIClient {
             }
 
             this.socket.onerror = (err) => {
-                console.log("Error from the back end connection:", err);
+                if(this.socket.readyState == 3)
+                    console.log("There was an error connecting to the application or the server closed the connection unexpectedly.")
+                else
+                    console.log("Error from the back end connection:", err);
                 reject();
             }
         })
