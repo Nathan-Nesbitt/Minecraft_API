@@ -133,12 +133,12 @@ export default class MinecraftAPIClient {
      */
     open_game_connection() {
         if (!window.ipcRenderer)
-            return false;
+            console.log("You must be connected within the game. This application will not run in the browser.")
         // If the app responds, we run the response handler function
-        window.ipcRenderer.on("responseFromApp", (err, str) => {
-            this.game_response(err, str);
-        });
-        return true; 
+        else
+            window.ipcRenderer.on("responseFromApp", (err, str) => {
+                this.game_response(err, str);
+            });
     }
 
     game_response(error, response) {
@@ -222,7 +222,10 @@ export default class MinecraftAPIClient {
      * @param {JSON} message 
      */
     send_message_to_game(message) {
-        window.ipcRenderer.sendToHost('sendToApp', message);
+        if(!window.ipcRenderer)
+            console.log("You must be connected within the game. This application will not run in the browser.")
+        else
+            window.ipcRenderer.sendToHost('sendToApp', message);
     }
 }
 
