@@ -63,6 +63,7 @@ export default class MinecraftAPIClient {
      * @param {number} port 
      */
     constructor(port = 5678) {
+        this.port = port;
         // The games messages that need to be sent
         this.game_messages = {}
         // This is a shared resource to halt attempts to connect while running a command
@@ -73,7 +74,6 @@ export default class MinecraftAPIClient {
         this.open_backend_connection();
         // Keep message objects to avoid garbage collection //
         this.message_objects = [];
-        this.port = port;
     }
 
     /**
