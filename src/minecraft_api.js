@@ -73,7 +73,7 @@ export default class MinecraftAPIClient {
         this.open_backend_connection();
         // Keep message objects to avoid garbage collection //
         this.message_objects = [];
-        this.port;
+        this.port = port;
     }
 
     /**
