@@ -134,7 +134,7 @@ class MinecraftLearns extends BackendMessage {
      * @returns {Promise}
      */
     async save(name=null) {
-        return this.send.send_data("save", name)
+        return this.send_data("save", name)
     }
 
     /**
@@ -145,7 +145,7 @@ class MinecraftLearns extends BackendMessage {
      * @returns {Promise}
      */
     async load(name) {
-        return this.send.send_data("load", name)
+        return this.send_data("load", name)
     }
 
     /**
