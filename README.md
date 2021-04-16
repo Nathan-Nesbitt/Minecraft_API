@@ -16,7 +16,7 @@ You can simply include the distribution file `minecraft_api.js` inside of
 your project. 
 
 ```html
-<script>
+<script type="module">
     import MinecraftAPIClient from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
 
     import MinecraftLearns from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_learns.js';
@@ -39,16 +39,17 @@ var minecraftAPI = new MinecraftAPIClient()
 ```
 
 This creates both a connection with the game, and a connection on the backend
-with a WS server listening on port 5678.
+with a WS server listening on port 5678. You can also specify a port number 
+as a parameter to the `MinecraftAPIClient()` to allow for additional changes. 
 
-This must be run first.
+This object must always be created.
 
 ### EventHandler
 Creates a new event, takes an event to handle and a function to call back to 
 whenever the event is triggered.
 
 ```js
-var minecraftAPI = new MinecraftAPIClient()
+var minecraftAPI = new MinecraftAPIClient();
 
 var callback_function () {
     console.log("My Callback Function");
@@ -168,7 +169,7 @@ asynchronous so you can use the `then()` javascript syntax to ensure that the
 data is processed before going onto the next step.
 
 ```js
-minecraft_learns.process_data()
+minecraft_learns.process_data();
 ```
 
 #### train
@@ -176,7 +177,7 @@ This step trains the model using the data. Again this is async so you can use
 the `then()` syntax to control the process flow to wait for the backend response.
 
 ```js
-minecraft_learns.train()
+minecraft_learns.train();
 ```
 
 #### predict
@@ -200,7 +201,7 @@ It takes an optional filename parameter, if not specified it sets it to
 a UUID.
 
 ```js
-minecraft_learns.plot("filename")
+minecraft_learns.plot("filename");
 ```
 
 #### save
@@ -210,7 +211,7 @@ other people or if you want to reload it at a later time.
 It takes an optional filename parameter, and 
 
 ```js
-minecraft_learns.save("filename")
+minecraft_learns.save("filename");
 ```
 
 #### load
@@ -219,13 +220,14 @@ The model must have been created using the `save` functionality in
 minecraft_learns.
 
 ```js
-minecraft_learns.load("filename")
+minecraft_learns.load("filename");
 ```
 
 ## Full Example Script
 
-```js
+```html
 // Importing the libraries //
+<script type="module">
 
 import MinecraftAPIClient from 'https://nathan-nesbitt.github.io/Minecraft_API/src/minecraft_api.js';
 
@@ -300,7 +302,7 @@ minecraft_learns.process_data()
         // Then we create an event handler for the game event //
         minecraft_api.PlayerTravelledEvent(callback_function_3)
     })
-
+</script>
 ```
 
 ## Development
